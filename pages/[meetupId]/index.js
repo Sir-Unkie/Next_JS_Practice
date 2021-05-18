@@ -29,7 +29,7 @@ export const getStaticPaths = async () => {
         meetupId: elem._id.toString(),
       },
     })),
-    fallback: false,
+    fallback: 'blocking',
   };
 };
 
