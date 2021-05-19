@@ -17,15 +17,19 @@ const HomePage = props => {
 
 export const getStaticProps = async () => {
   // const response = await fetch();
-  MongoClient.connect();
-  const client = await MongoClient.connect(
-    'mongodb+srv://Unkie:!QAZ1qaz@WSX2wsx@myfirsttestcluster.jbxhv.mongodb.net/myFirstMeetups?retryWrites=true&w=majority'
-  );
-  const db = client.db();
-  const meetupsCollection = db.collection('myFirstMeetups');
-  const meetups = await meetupsCollection.find().toArray();
-  //   console.log('meetups: ', meetups);
-  client.close();
+  try {
+    MongoClient.connect();
+    const client = await MongoClient.connect(
+      'mongodb+srv://Unkie:!QAZ1qaz@WSX2wsx@myfirsttestcluster.jbxhv.mongodb.net/myFirstMeetups?retryWrites=true&w=majority'
+    );
+    const db = client.db();
+    const meetupsCollection = db.collection('myFirstMeetups');
+    const meetups = await meetupsCollection.find().toArray();
+    //   console.log('meetups: ', meetups);
+    client.close();
+  } catch (error) {
+    console.log(error);
+  }
 
   return {
     props: {

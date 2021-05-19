@@ -34,18 +34,22 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async context => {
-  const meetupId = context.params.meetupId;
-  console.log(meetupId);
-  MongoClient.connect();
-  const client = await MongoClient.connect(
-    'mongodb+srv://Unkie:!QAZ1qaz@WSX2wsx@myfirsttestcluster.jbxhv.mongodb.net/myFirstMeetups?retryWrites=true&w=majority'
-  );
-  const db = client.db();
-  const meetupsCollection = db.collection('myFirstMeetups');
-  const selectMeetup = await meetupsCollection.findOne({
-    _id: ObjectId(meetupId),
-  });
-  client.close();
+  try {
+    const meetupId = context.params.meetupId;
+    console.log(meetupId);
+    MongoClient.connect();
+    const client = await MongoClient.connect(
+      'mongodb+srv://Unkie:!QAZ1qaz@WSX2wsx@myfirsttestcluster.jbxhv.mongodb.net/myFirstMeetups?retryWrites=true&w=majority'
+    );
+    const db = client.db();
+    const meetupsCollection = db.collection('myFirstMeetups');
+    const selectMeetup = await meetupsCollection.findOne({
+      _id: ObjectId(meetupId),
+    });
+    client.close();
+  } catch (error) {
+    console.log(error);
+  }
   return {
     props: {
       meetupData: {
