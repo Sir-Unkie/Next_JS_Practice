@@ -14,23 +14,27 @@ const MeetupDetails = props => {
 };
 
 export const getStaticPaths = async () => {
-  MongoClient.connect();
-  const client = await MongoClient.connect(
-    'mongodb+srv://Unkie:!QAZ1qaz@WSX2wsx@myfirsttestcluster.jbxhv.mongodb.net/myFirstMeetups?retryWrites=true&w=majority'
-  );
-  const db = client.db();
-  const meetupsCollection = db.collection('myFirstMeetups');
-  const meetups = await meetupsCollection.find({}, { _id: 1 }).toArray();
-  client.close();
-  //   console.log(meetups);
-  return {
-    paths: meetups.map(elem => ({
-      params: {
-        meetupId: elem._id.toString(),
-      },
-    })),
-    fallback: 'blocking',
-  };
+  try {
+    MongoClient.connect();
+    const client = await MongoClient.connect(
+      'mongodb+srv://Unkie:!QAZ1qaz@WSX2wsx@myfirsttestcluster.jbxhv.mongodb.net/myFirstMeetups?retryWrites=true&w=majority'
+    );
+    const db = client.db();
+    const meetupsCollection = db.collection('myFirstMeetups');
+    const meetups = await meetupsCollection.find({}, { _id: 1 }).toArray();
+    client.close();
+    //   console.log(meetups);
+    return {
+      paths: meetups.map(elem => ({
+        params: {
+          meetupId: elem._id.toString(),
+        },
+      })),
+      fallback: 'blocking',
+    };
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getStaticProps = async context => {
@@ -47,20 +51,22 @@ export const getStaticProps = async context => {
       _id: ObjectId(meetupId),
     });
     client.close();
+
+    return {
+      props: {
+        meetupData: {
+          id: selectMeetup._id.toString(),
+          title: selectMeetup.title,
+          image: selectMeetup.image,
+          description: selectMeetup.description,
+          address: selectMeetup.address,
+        },
+      },
+    };
   } catch (error) {
     console.log(error);
+    alert(error);
   }
-  return {
-    props: {
-      meetupData: {
-        id: selectMeetup._id.toString(),
-        title: selectMeetup.title,
-        image: selectMeetup.image,
-        description: selectMeetup.description,
-        address: selectMeetup.address,
-      },
-    },
-  };
 };
 
 export default MeetupDetails;

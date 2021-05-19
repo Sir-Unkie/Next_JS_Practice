@@ -27,21 +27,22 @@ export const getStaticProps = async () => {
     const meetups = await meetupsCollection.find().toArray();
     //   console.log('meetups: ', meetups);
     client.close();
+
+    return {
+      props: {
+        meetups: meetups.map(elem => ({
+          title: elem.title,
+          address: elem.address,
+          image: elem.image,
+          id: elem._id.toString(),
+        })),
+      },
+      revalidate: 1,
+    };
   } catch (error) {
     console.log(error);
+    alert(error);
   }
-
-  return {
-    props: {
-      meetups: meetups.map(elem => ({
-        title: elem.title,
-        address: elem.address,
-        image: elem.image,
-        id: elem._id.toString(),
-      })),
-    },
-    revalidate: 1,
-  };
 };
 
 export default HomePage;
