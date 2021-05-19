@@ -4,6 +4,7 @@ import { useEffect, useState, Fragment } from 'react';
 import { MongoClient } from 'mongodb';
 
 const HomePage = props => {
+  console.log(props.meetups);
   return (
     <Fragment>
       <Head>
